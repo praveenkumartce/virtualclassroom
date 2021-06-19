@@ -1,0 +1,31 @@
+{% extends 'home_navbar.html' %}
+{% load static %}
+
+<head>
+    <title>Virtual Classroom</title>
+
+</head>
+{% block body %}
+<div align="center"><img src="https://www.bricks4kidz.com/virginia-ashburn-leesburg/wp-content/uploads/sites/96/2020/04/WebsiteVCSlider.jpg"  style="width=100%;height:600px;"></div>
+
+
+<div class="container">
+    <h3 style="color:darkblue;font-Weight:bold">Why Virtual Classroom ?</h3>
+    <h4 style="color:blue;font-Weight:bold">Attendance:</h4>
+    <ul>
+    <li><h5 >Students can themselves mark Attendance by entering the verification code given by the Faculty.</h5></li>
+        <li><h5 >Faculty is Engaged that they are relieved from taking daily Attendance </h5></li></ul>
+    <h4 style="color:blue;font-Weight:bold">Assignment submission:</h4>
+    <ul>
+    <li>
+        <h5>Students will be allowed to submit assignment for each particular course,to which they are enrolled.</h5></li></ul>
+    <h4 style="color:blue;font-Weight:bold">Quiz:</h4>
+    <ul>
+    <li>
+        <h5 >Quiz will be allowed only in FullScreen mode to avoid Malpractice</h5></li></ul>
+</div>
+&nbsp;
+<div class="container">
+Login as <button  onclick="location.href='{% url 'admin_login' %}'" style="color:darkblue" class="btn-primary">Administrator</button> here</div>
+&nbsp;
+{% endblock %}

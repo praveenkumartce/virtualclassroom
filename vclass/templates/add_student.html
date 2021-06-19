@@ -1,0 +1,46 @@
+{% extends 'admin_navbar.html' %}
+{% load static %}
+{% block body %}
+{% ifequal error "no" %}
+<script>
+    alert('User Created Successfully')
+    window.location=("{% url 'view_student' %}")
+</script>
+{% endifequal %}
+
+{% ifequal error "yes" %}
+<script>
+    alert('Please try again')
+</script>
+{% endifequal %}
+<form  method="post" >
+  <div align="center" class="imgcontainer">
+    <h2 style="color:blue">Add Student </h2>
+    <img src="/static/images/student.png" alt="Student" class="student">
+  </div>
+
+  <div align="center" class="container">
+      {% csrf_token %}
+    <label ><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+    <br>
+    <label ><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psd" required>
+<br>
+      <label ><b>Student Id</b></label>
+    <input type="text" placeholder="Enter Id" name="student_id" required>
+<br>
+      <label ><b>Student Name</b></label>
+    <input type="text" placeholder="Enter Name" name="student_name" required>
+<br>
+      <label ><b>Student Department</b></label>
+    <input type="number" placeholder="Enter Name" name="student_dept" required>
+<br>
+
+      <label ><b>Student Joindate</b></label>
+    <input type="date" placeholder="Enter date" name="since" required>
+<br>
+    <button type="submit">Add</button><br>
+  </div>
+</form>
+{% endblock %}

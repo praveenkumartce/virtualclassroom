@@ -1,0 +1,40 @@
+{% extends 'home_navbar.html' %}
+{% load static %}
+
+
+
+
+{% block body %}
+{% ifequal error "no" %}
+<script>
+    alert('Logged in Successfully')
+    window.location=("{% url 'faculty' fid.faculty_id %}")
+</script>
+{% endifequal %}
+
+{% ifequal error "yes" %}
+<script>
+    alert('Invalid Login, Try Again')
+</script>
+{% endifequal %}
+<form method="post">
+  <div align="center" class="imgcontainer">
+    <h2 style="color:blue">Faculty Login</h2>
+    <img src="/static/images/faculty.png" alt="Faculty" class="faculty">
+  </div>
+
+  <div align="center" class="container">
+      {% csrf_token %}
+    <label ><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+    <br>
+    <label ><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psd" required>
+<br>
+    <button type="submit" class="btn btn-primary">Login</button><br>
+
+  </div>
+
+
+</form>
+{% endblock %}

@@ -1,0 +1,239 @@
+
+
+{% load static %}
+
+<head>
+    <title>Faculty</title>
+    <link rel="shortcut icon" href="/static/images/vclasslogo.jpg" type="image/x-icon">
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mystyle.css' %}">
+</head>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<a class="navbar-brand" href="#">Virtual Classroom</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myMenu">
+<span class ="navbar-toggler-icon"></span>
+    </button>
+  <div class="collapse navbar-collapse" id="myMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"> <a class="nav-link"href="{% url 'faculty' fid %}"><i class="fa fa-home" aria-hidden="true"></i> Home</a> </li>
+
+
+
+
+        </ul>
+        <div class="d-flex align-items-center nav-item dropdown">
+
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+            {% for i in f %}
+          <a class="dropdown-item" href="{% url 'course_fac_page' i.course_id fid %}"> {{i.course_id}}</a>
+
+            {% endfor %}
+
+        </div>
+</div>
+    </div>
+    <div class="d-flex align-items-center nav-item dropdown">
+<h6 style="color:white">Welcome,</h6>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{fid}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'faculty_profile' fid %}"><i class="far fa-address-card"></i>Profile</a>
+          <a class="dropdown-item" href="/faculty_logout"><i class="fas fa-phone-volume"></i>Logout</a>
+        </div>
+</div>
+</nav>
+
+{% block body %}
+<style>
+    input
+    {
+    width:280px;
+    }
+    #q{
+  border: 5px outset grey;
+ }
+ .questions {
+  display: none;
+}
+</style>
+
+<script>
+
+$(document).ready(function(){
+
+ $("#trigger").click(function(){
+
+  // Create clone of <div class='input-form'>
+  var newel = $('.question-form:last').clone();
+
+  // Add after last <div class='input-form'>
+  $(newel).insertAfter(".question-form:last");
+  console.log("success");
+
+ });
+ });
+
+$(document).ready(function(){
+  $("#q").click(function(){
+    $(".questions").slideToggle("slow");
+  });
+});
+</script>
+<div class="container">
+<h3 style="color:blue;text-align:center">{{q.title}}</h3>
+<div style="float:right;"><button class="btn btn-secondary" onclick="location.href='{% url 'course_fac_page' cid fid %}'">Back to Course</button></div>
+<div style="clear: both;"></div></div>
+<div id="temp" style="margin:auto;width:300px">
+
+<form action="{% url 'update_quiz' q.quiz_id cid fid%}" method="post">
+    {% csrf_token %}
+
+    <label><b>Title: </b></label><br>
+    <input type="text" name="title" value="{{q.title}}"><br>
+    <label><b>Start Time: {{q.start_time}}</b></label><br>
+    <input type="datetime-local" name="start_time" ><br>
+    <label><b>End Time: {{q.end_time}}</b></label><br>
+    <input type="datetime-local" name="end_time" ><br>
+    <label><b>Duration: </b></label><br>
+    <input type="number" name="duration" value="{{q.duration}}"><br>
+    <label><b>No. of Questions: </b></label><br>
+    <input type="number" name="no_of_questions" value="{{q.no_of_questions}}"><br><br>
+    <button class="btn-warning " type="submit" id="update" value="Update">Update Quiz</button>
+    <a class="btn-danger btn-lg" href="{% url 'delete_quiz' q.quiz_id cid fid %}" id="delete" value="Delete">Delete Quiz</a>
+</form>
+    </div>
+
+<div class="container">
+<div class="card" id="q" style="width:100%">Quiz Questions </div>
+
+<div class="questions">
+    {% for q in quiz_questions %}
+    <form action="{% url 'delete_question' q.question_id cid fid %}" method="post">
+        {% csrf_token %}
+    <h4><b>{{ forloop.counter }}){{ q.question }}</b></h4>
+    <p>i.{{ q.option1 }}</p>
+    <p>ii.{{ q.option2 }}</p>
+    <p>iii.{{ q.option3 }}</p>
+    <p>iv.{{ q.option4 }}</p>
+    <p><b>Correct option is: {{ q.correct }}</b></p>
+    <button type="submit" class="btn-danger"  id="delete1" value="Delete">Delete</button>
+    </form>
+    {% endfor %}
+<h3 style="color:darkblue;text-align:center">Add Quiz questions</h3>
+    <form action="{% url 'add_questions' q.quiz_id cid fid %}" class="add_questions" method="post">
+        {% csrf_token %}
+        <div class="question-form">
+            <h3 style="color:blue;text-align:center">Question: </h3>
+              <div class="form-group row">
+    <label for="question" class="col-sm-2 col-form-label">Question</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="question" name="question[]" placeholder="Quiz question">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="option1" class="col-sm-2 col-form-label">Option1</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="option1" name="option1[]" placeholder="option1">
+    </div>
+  </div>
+            <div class="form-group row">
+    <label for="option2" class="col-sm-2 col-form-label">Option2</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="option2" name="option2[]" placeholder="option2">
+    </div>
+  </div>
+            <div class="form-group row">
+    <label for="option3" class="col-sm-2 col-form-label">Option3</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="option3" name="option3[]" placeholder="option3">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="option4" class="col-sm-2 col-form-label">Option4</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="option4" name="option4[]" placeholder="option4">
+    </div>
+  </div>
+   <div class="form-group row">
+    <label for="correct" class="col-sm-2 col-form-label">correct</label>
+    <div class="col-sm-10">
+        <select type="text" class="form-control" id="correct" name="correct[]" placeholder="correct">
+            <option value="option1">option1</option>
+            <option value="option2">option2</option>
+            <option value="option3">option3</option>
+            <option value="option4">option4</option>
+        </select>
+    </div>
+  </div>
+        </div>
+
+<button type="submit" class="btn btn-primary">Save</button>
+
+</form>
+<button id="trigger" class="btn-info">+Add Question</button>
+    </div>
+</div>
+
+
+<div class="container">
+    <h3 class="text-center">{{ q.title }} Submissions </h3>
+    <br>
+    <h4>Start Time:{{ q.start_time }}</h4>
+    <h4>End Time:{{ q.end_time }}</h4>
+    <h5>Status
+{% ifequal q.active True %}
+
+<a href="#" class="btn btn-success" role="button">Open</a>
+{% endifequal %}
+
+{% ifequal q.active False %}
+<a href="#" class="btn btn-warning" role="button">Closed</a>
+{% endifequal %}</h5>
+    <table class="table table-hover" id="example">
+        <thead>
+        <tr>
+            <th>Student Id</th>
+            <th>Student Name</th>
+            <th>Last Modified</th>
+            <th>Score(%)</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in quizresult %}
+        <tr>
+            <td>{{i.student_id}}</td>
+            <td>{{i.student_id.student_name}}</td>
+            <td>{{i.stamp}}</td>
+
+
+
+                {% ifequal i.status False %}
+                <td></td>
+                <td><button  class="btn btn-warning" type="submit" role="button">Not Submitted</button></td>
+
+                {% endifequal %}
+
+                {% ifequal i.status True %}
+            <td>{{ i.score }}</td>
+            <td><a href="#" class="btn btn-success" role="button">Submitted</a></td>
+                {% endifequal %}
+
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

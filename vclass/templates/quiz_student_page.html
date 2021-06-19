@@ -1,0 +1,122 @@
+
+{% load static %}
+<head>
+    <title>Student</title>
+<link rel="shortcut icon" href="/static/images/vclasslogo.jpg" type="image/x-icon">
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mystyle.css' %}">
+</head>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<a class="navbar-brand" href="#">Virtual Classroom</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myMenu">
+<span class ="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="myMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"> <a class="nav-link"href="{% url 'student' sid %}"><i class="fa fa-home" aria-hidden="true"></i> Home</a> </li>
+
+
+
+
+        </ul>
+        <div class="d-flex align-items-center nav-item dropdown">
+
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for i in course %}
+          <a class="dropdown-item" href="{% url 'course_stud_page' i.course_id sid %}"> {{i.course_id}}</a>
+
+            {% endfor %}
+
+        </div>
+</div>
+    </div>
+
+    <div class="d-flex align-items-center nav-item dropdown">
+<h6 style="color:white">Welcome,</h6>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{sid}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'student_profile' sid %}"><i class="far fa-address-card"></i> Profile</a>
+          <a class="dropdown-item" href="/student_logout"><i class="fas fa-phone-volume"></i> Logout</a>
+        </div>
+</div>
+</nav>
+
+
+{% block scripts %}
+
+
+
+{% endblock scripts%}
+{% block body %}
+
+<h3 class="text-center">{{ q.title }} </h3>
+<div class="container">
+    <div style="float:right;"><button class="btn btn-secondary" onclick="location.href='{% url 'course_stud_page' cid sid %}'">Back to Course</button></div>
+<div style="clear: both;"></div>
+<h4>Start Time:{{ q.start_time }}</h4>
+    <h4>End Time:{{ q.end_time }}</h4>
+    {% ifequal q.active True %}
+    <button class="btn-success">Open</button>
+    {% ifequal qresult.status False %}
+    <div  style="margin:auto;text-align:center;">
+<button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Attempt Quiz
+</button>
+</div>
+    {% endifequal %}
+    {% endifequal %}
+    {% ifequal q.active False %}
+    <button class="btn-danger">Closed</button>
+    {% endifequal %}
+    <br>
+
+    {% ifequal qresult.status True %}
+<h5>Last modified: {{ qresult.stamp }}</h5>
+
+<h5>Status: <button  class="btn btn-success"  role="button">Submitted</button></h5>
+<h5>Score: {{ qresult.score }}</h5>
+{% endifequal %}
+
+{% ifequal qresult.status False %}
+<h5>Status: <button  class="btn btn-warning"  role="button">Not Submitted</button></h5>
+
+{% endifequal %}
+    <!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div  class="modal-header">
+          <h5  class="modal-title" id="exampleModalLabel"><b>{{q.title}}</b></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <h5><b>Number of questions: </b>{{ q.no_of_questions }}</h5>
+          <h5><b>Quiz Duration: </b>{{ q.duration }} minutes</h5>
+        <h5>Terms & conditions:
+        </h5>
+      </div>
+      <div class="modal-footer">
+        <a type="button" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+        <a type="button" target="_blank" href="{% url 'quiz_page' q.quiz_id cid sid %}" class="btn btn-success">Start Quiz</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+
+{% load static %}
+<head>
+    <title>Student</title>
+<link rel="shortcut icon" href="/static/images/vclasslogo.jpg" type="image/x-icon">
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mystyle.css' %}">
+</head>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<a class="navbar-brand" href="#">Virtual Classroom</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myMenu">
+<span class ="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="myMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"> <a class="nav-link"href="{% url 'student' sid %}"><i class="fa fa-home" aria-hidden="true"></i> Home</a> </li>
+
+
+
+
+        </ul>
+        <div class="d-flex align-items-center nav-item dropdown">
+
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for i in course %}
+          <a class="dropdown-item" href="{% url 'course_stud_page' i.course_id sid %}"> {{i.course_id}}</a>
+
+            {% endfor %}
+
+        </div>
+</div>
+    </div>
+
+    <div class="d-flex align-items-center nav-item dropdown">
+<h6 style="color:white">Welcome,</h6>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{sid}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'student_profile' sid %}"><i class="far fa-address-card"></i> Profile</a>
+          <a class="dropdown-item" href="/student_logout"><i class="fas fa-phone-volume"></i> Logout</a>
+        </div>
+</div>
+</nav>
+
+{% block body %}
+<div class="container">
+<h3 class="text-center">{{ a.ass_name }} Submission</h3>
+<div style="float:right;"><button class="btn btn-secondary" onclick="location.href='{% url 'course_stud_page' cid sid %}'">Back to Course</button></div>
+<div style="clear: both;"></div>
+{% ifequal error "not active" %}
+    <script>
+alert("This Assignment is not accepting submissions");
+</script>
+{% endifequal %}
+    <h5 style="color:blue"><b>Assignment File</b></h5>
+    <a href="/static/assignment/{{ a.ass_file }}"  download><u>{{a.ass_file}}</u></a><br>
+<h5>Status</h5>
+{% ifequal a.active True %}
+
+<a href="#" class="btn btn-success" role="button">Open</a><br>
+{% endifequal %}
+
+{% ifequal a.active False %}
+<a href="#" class="btn btn-warning" role="button">Closed</a><br>
+{% endifequal %}
+{% ifequal sub.graded True %}
+<h5><b>Last modified: </b>{{ sub.date }}</h5>
+
+    <h5><b>Grading status: </b><button  class="btn btn-success" type="submit" role="button">Graded</button></h5>
+    <h5><b>Marks: </b> {{ sub.marks }}</h5>
+{% endifequal %}
+
+{% ifequal sub.graded False %}
+<h5><b>Grading status: </b>Not graded </h5>
+    <h5><b>Marks: </b>-</h5>
+{% endifequal %}
+
+
+
+{% ifnotequal sub.date None %}
+    <h5><b>Submission Files:</b></h5>
+{% for i in files %}
+    <a href="/static/assignment_submissions/{{ i.sub_files }}" download><u>{{ i.sub_files }}</u></a><br>
+{% endfor %}
+{% endifnotequal %}
+
+{% ifequal a.active True %}
+{% ifequal sub.date None %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label >Submit your files here: </label>
+    <br>
+    <label>File submissions:</label>
+    <input type="file" name="files" multiple>
+    <br>
+    <button  type="Submit" >Submit</button>
+
+</form>
+{% endifequal %}
+    {% endifequal %}
+</div>
+
+{% endblock %}

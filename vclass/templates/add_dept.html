@@ -1,0 +1,33 @@
+{% extends 'admin_navbar.html' %}
+{% load static %}
+{% block body %}
+{% ifequal error "no" %}
+<script>
+    alert('Record Saved Successfully')
+
+    window.location=("{% url 'view_dept' %}")
+</script>
+{% endifequal %}
+
+{% ifequal error "yes" %}
+<script>
+    alert('Something went wrong, Try Again')
+</script>
+{% endifequal %}
+
+<form method="post">
+<div align=center class="course" style="margin-top:50px">
+    <h2 style="color:blue">Add Department</h2>
+    {% csrf_token %}
+    <label ><b>Department Id:</b></label>
+    <input type="number" placeholder="Enter Department id" name="did" required>
+    <br>
+    <label ><b>Department Name:</b></label>
+    <input type="text" placeholder="Enter Department Name" name="dname" required><br>
+    <label ><b>Date Formed:</b></label>
+    <input type="date"  name="date" required><br>
+    <button type="submit">Add</button>
+</div>
+    </form>
+
+{% endblock %}

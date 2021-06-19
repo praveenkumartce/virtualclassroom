@@ -1,0 +1,33 @@
+{% extends 'admin_navbar.html' %}
+{% load static %}
+{% block body %}
+{% ifequal error "no" %}
+<script>
+    alert('Record Saved Successfully')
+
+    window.location=("{% url 'view_course' %}")
+</script>
+{% endifequal %}
+
+{% ifequal error "yes" %}
+<script>
+    alert('Something went wrong, Try Again')
+</script>
+{% endifequal %}
+
+<form method="post">
+<div align=center class="course" style="margin-top:50px">
+    <h2 style="color:blue">Add Course</h2>
+    {% csrf_token %}
+    <label ><b>Course Id:</b></label>
+    <input type="text" placeholder="Enter courseid" name="cid" required>
+    <br>
+    <label ><b>Course Name:</b></label>
+    <input type="text" placeholder="Enter course Name" name="cname" required><br>
+    <label ><b>Department:</b></label>
+    <input type="number" placeholder="Enter Department" name="dname" required><br>
+    <button type="submit">Add</button>
+</div>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,248 @@
+{% load static %}
+<head>
+    <title>Student</title>
+    <link rel="shortcut icon" href="/static/images/vclasslogo.jpg" type="image/x-icon">
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mystyle.css' %}">
+</head>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<a class="navbar-brand" href="#">Virtual Classroom</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myMenu">
+<span class ="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="myMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"> <a class="nav-link"href="{% url 'student' sid %}"><i class="fa fa-home" aria-hidden="true"></i> Home</a> </li>
+
+
+
+
+        </ul>
+        <div class="d-flex align-items-center nav-item dropdown">
+
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for i in course %}
+          <a class="dropdown-item" href="{% url 'course_stud_page' i.course_id sid %}"> {{i.course_id}}</a>
+
+            {% endfor %}
+
+        </div>
+</div>
+    </div>
+
+    <div class="d-flex align-items-center nav-item dropdown">
+<h6 style="color:white">Welcome,</h6>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{sid}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'student_profile' sid %}"><i class="far fa-address-card"></i> Profile</a>
+          <a class="dropdown-item" href="/student_logout"><i class="fas fa-phone-volume"></i> Logout</a>
+        </div>
+</div>
+</nav>
+
+{% block body %}
+
+<style>
+.card{
+  border: 5px outset darkblue;
+ }
+.data {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+.full {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+
+
+.container {
+  padding: 16px;
+}
+
+
+</style>
+{% ifequal error "no" %}
+<script>
+    alert('You got Attendance !! Successfully')
+    window.location=("{% url 'course_stud_page' c.course_id sid %}")
+</script>
+{% endifequal %}
+{% ifequal error "code mismatch" %}
+<script>
+    alert('Attendance Code Mismatch, Try Again !')
+    window.location=("{% url 'course_stud_page' c.course_id sid %}")
+</script>
+{% endifequal %}
+
+{% ifequal error "time over" %}
+<script>
+    alert('Attendance Time Over !!!')
+    window.location=("{% url 'course_stud_page' c.course_id sid %}")
+</script>
+{% endifequal %}
+
+{% ifequal error "got already" %}
+<script>
+    alert('Got Attendance Already')
+    window.location=("{% url 'course_stud_page' c.course_id sid %}")
+</script>
+{% endifequal %}
+<script>
+    function attendance()
+    {
+    document.getElementById('att').style.display='block';
+    }
+    function announcement()
+    {
+    document.getElementById('ann').style.display='block';
+    }
+    function assignment()
+    {
+    document.getElementById('ass').style.display='block';
+    }
+</script>
+<body>
+
+<script>
+  function f1(x)
+  {
+    {% ifequal x.active False %}
+    alert("Attendance Time Over !!!");
+    {% endifequal %}
+
+    }
+  </script>
+
+
+
+
+
+<script>
+// Get the modal
+var modal = document.getElementById('att');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+</body>
+
+
+<div class="card"   style="width: 50rem;margin: auto;">
+  <div class="card-body">
+<h2 class="card-title" style="color:blue;text-align:center ">{{c.course_id}}  {{c.course_name}}</h2>
+
+
+    <h3 class="card-text" style="color:green;float:left;">Faculty: {{c.course_faculty}}</h3>
+
+    <h4 class="card-text" style="color:green;float:right;">Students Enrolled: {{c.part_count}} </h4>
+    <br>
+<div style="clear: both;"></div>
+
+
+  <a style="float:right" href="{% url 'show_participants' c.course_id %}" class="btn btn-success btn-lg" >Participants</a>
+
+<div style="clear: both;"></div>
+    <h4 style="float:right;color:blue;" class="card-text" >Department: {{c.dep_id.dep_name}}</h4>
+</div>
+</div>
+
+
+{% ifnotequal co 0 %}
+<h3 style="color:blue; ">Attendance:</h3>
+<hr>
+{% for object in n %}
+<div class="ml-3">
+<a href="#" >{{ object.att_date}} {{ object.att_hour }} </a>
+<form method="post" action="{% url 'give_attendance' object.att_id sid c.course_id %}">
+  {% csrf_token %}
+  <label>Attendance Code:</label>
+  <input id="code" type="text" name="acode" >
+<button id="claim" onclick="f1(object.att_id)" type="submit">Give Attendance</button>
+&nbsp;<h5>Status</h5>
+{% ifequal object.active True %}
+
+<a href="#" class="btn btn-success" role="button">Open</a><br>
+{% endifequal %}
+
+{% ifequal object.active False %}
+<a href="#" class="btn btn-warning" role="button">Closed</a><br>
+
+{% endifequal %}
+</form>
+</div>
+<hr>
+
+
+
+{% endfor %}
+{% endifnotequal %}
+
+
+{% ifnotequal asscount 0 %}
+<h3 style="color:blue;">Assignment:</h3>
+
+{% for obj in ass %}
+<div class="list-group">
+
+<a  href="{% url 'view_assignment_student' c.course_id sid obj.ass_id %}" class="list-group-item list-group-item-action" >
+{{obj.ass_name}}</a>
+</div>
+{% endfor %}
+<br><br>
+
+{% endifnotequal %}
+
+{% ifnotequal quiz.count 0 %}
+<h3 style="color:blue;">Quiz:</h3>
+{% endifnotequal %}
+<div class="list-group">
+{% for obj in quiz %}
+
+<a href="{% url 'view_quiz_student'  obj.quiz_id c.course_id sid %}" class="list-group-item list-group-item-action">{{obj.title}} </a>
+<br>
+
+{% endfor %}
+</div>
+
+{% endblock %}

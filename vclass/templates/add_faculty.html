@@ -1,0 +1,46 @@
+{% extends 'admin_navbar.html' %}
+{% load static %}
+{% block body %}
+{% ifequal error "no" %}
+<script>
+    alert('User Created Successfully')
+    window.location=("{% url 'view_faculty' %}")
+</script>
+{% endifequal %}
+
+{% ifequal error "yes" %}
+<script>
+    alert('Please try again')
+</script>
+{% endifequal %}
+<form  method="post" >
+  <div align="center" class="imgcontainer">
+    <h2 style="color:blue">Add Faculty </h2>
+    <img src="/static/images/faculty.png" alt="Faculty" class="faculty">
+  </div>
+
+  <div align="center" class="container">
+      {% csrf_token %}
+    <label ><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+    <br>
+    <label ><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psd" required>
+<br>
+      <label ><b>Faculty Id</b></label>
+    <input type="text" placeholder="Enter Id" name="faculty_id" required>
+<br>
+      <label ><b>Faculty Name</b></label>
+    <input type="text" placeholder="Enter Name" name="faculty_name" required>
+<br>
+      <label ><b>Faculty Department</b></label>
+    <input type="number" placeholder="Enter Name" name="faculty_dept" required>
+<br>
+      <label ><b>Faculty Deg</b></label>
+    <input type="text" placeholder="Enter deg" name="faculty_deg" required>
+<br>
+      <label ><b>Faculty Joindate</b></label>
+    <input type="date" placeholder="Enter date" name="since" required>
+<br>
+    <button type="submit">Add</button><br>
+{% endblock %}
